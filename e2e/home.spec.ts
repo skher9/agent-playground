@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { launchOptions } from "./browser";
+
+test.use({ launchOptions });
 
 test("home page loads with its heading", async ({ page }) => {
   const errors: string[] = [];
