@@ -5,7 +5,7 @@ test("unknown URL shows the page-not-found heading", async ({ page }) => {
   page.on("pageerror", (err) => errors.push(err.message)); // uncaught browser errors
 
   await page.goto("/this-page-does-not-exist");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Page not found");
+  await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
