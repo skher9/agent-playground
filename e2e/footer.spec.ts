@@ -20,8 +20,9 @@ test("the footer has a Home link that goes to /", async ({ page }) => {
     name: "Home",
   });
   await expect(homeLink).toBeVisible();
-  await homeLink.click();
-  await expect(page).toHaveURL("/");
+  // The app has a single route, so clicking from "/" could never change the URL.
+  // Assert the navigation target instead of clicking.
+  await expect(homeLink).toHaveAttribute("href", "/");
   expect(errors).toEqual([]);
 });
 
