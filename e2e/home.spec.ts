@@ -10,6 +10,9 @@ test("home page loads with its heading", async ({ page }) => {
 });
 
 test("every page shows a 'Dark mode' button in the top right", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (err) => errors.push(err.message)); // uncaught browser errors
+
   await page.goto("/");
   const button = page.getByRole("button", { name: "Dark mode" });
   await expect(button).toBeVisible();
@@ -20,30 +23,42 @@ test("every page shows a 'Dark mode' button in the top right", async ({ page }) 
   // Top right corner: closer to the right edge than the left, and above the middle.
   expect(box!.x + box!.width / 2).toBeGreaterThan(viewport!.width / 2);
   expect(box!.y + box!.height / 2).toBeLessThan(viewport!.height / 2);
+  expect(errors).toEqual([]);
 });
 
 test("clicking adds the 'dark' class to html and the button reads 'Light mode'", async ({
   page,
 }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (err) => errors.push(err.message)); // uncaught browser errors
+
   await page.goto("/");
   await page.getByRole("button", { name: "Dark mode" }).click();
 
   await expect(page.locator("html")).toHaveClass(/dark/);
   await expect(page.getByRole("button", { name: "Light mode" })).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test("clicking again removes the 'dark' class and the button reads 'Dark mode'", async ({
   page,
 }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (err) => errors.push(err.message)); // uncaught browser errors
+
   await page.goto("/");
   await page.getByRole("button", { name: "Dark mode" }).click();
   await page.getByRole("button", { name: "Light mode" }).click();
 
   await expect(page.locator("html")).not.toHaveClass(/dark/);
   await expect(page.getByRole("button", { name: "Dark mode" })).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test("dark mode survives a page reload", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (err) => errors.push(err.message)); // uncaught browser errors
+
   await page.goto("/");
   await page.getByRole("button", { name: "Dark mode" }).click();
   await expect(page.locator("html")).toHaveClass(/dark/);
@@ -52,4 +67,5 @@ test("dark mode survives a page reload", async ({ page }) => {
 
   await expect(page.locator("html")).toHaveClass(/dark/);
   await expect(page.getByRole("button", { name: "Light mode" })).toBeVisible();
+  expect(errors).toEqual([]);
 });
