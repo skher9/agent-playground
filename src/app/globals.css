@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+/* Tailwind v4: use the `.dark` class on <html> instead of prefers-color-scheme */
+@custom-variant dark (&:where(.dark, .dark *));
+
